@@ -8,36 +8,33 @@
 
 import { createClient } from '@supabase/supabase-js'
 
-// Account A credentials - read-only access
 const SUPABASE_A_URL = process.env.SUPABASE_A_URL!
 const SUPABASE_A_ANON_KEY = process.env.SUPABASE_A_ANON_KEY!
 
-if (!SUPABASE_A_URL || !SUPABASE_A_ANON_KEY) {
-  throw new Error('Missing Supabase Account A credentials')
-}
-
-// Read-only client for ideas pool
-export const supabaseA = createClient(SUPABASE_A_URL, SUPABASE_A_ANON_KEY, {
-  auth: {
-    autoRefreshToken: false,
-    persistSession: false
-  }
-})
+// Client for ideas pool operations (read-only)
+export const supabaseA = createClient(SUPABASE_A_URL, SUPABASE_A_ANON_KEY)
 
 // Database schema types for Account A
-export interface IdeaPoolRecord {
-  id: string
-  title: string
-  description: string
-  category: string
-  tags: string[]
-  source: string
-  popularity_score: number
-  market_size?: string
-  difficulty_level: 'beginner' | 'intermediate' | 'advanced'
-  embedding: number[] // pgvector embedding
+export interface ProductHuntProduct {
+  id: number
+  product_id: string
+  name: string
+  product_description: string
+  upvotes: number
+  comments: string
+  websites: string
+  category_tags: string
+  makers: string
   created_at: string
   updated_at: string
+  embedding?: any
+}
+
+export interface IdeaPoolRecord extends ProductHuntProduct {
+  // Add any additional fields for your use case
+  popularity_score?: number
+  difficulty_level?: 'beginner' | 'intermediate' | 'advanced'
+  market_size?: string
 }
 
 export interface MarketTrend {
